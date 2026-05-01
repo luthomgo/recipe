@@ -1,0 +1,236 @@
+/*
+  components.css
+  --------------
+  WHAT BELONGS HERE: Self-contained UI pieces that could
+  theoretically be lifted out and used anywhere on the site.
+
+  A recipe card doesn't care what section it's in.
+  A category pill doesn't care what page it lives on.
+  That independence is what makes something a "component."
+
+  RULE OF THUMB: If you can describe it as a noun
+  ("a card", "a pill", "a badge") — it's a component.
+  If you describe it as a place ("the hero", "the footer") — 
+  it belongs in layout.css.
+*/
+
+/* ---- CATEGORY PILLS ---- */
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.category-pill {
+  background: var(--color-bg-raised);
+  border: 2px solid transparent;
+  border-radius: var(--radius-xl);
+  padding: 0.65rem 1.2rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.category-pill:hover,
+.category-pill.active {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: rgba(196,98,45,0.06);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.cat-icon { font-size: 1rem; }
+
+/* ---- RECIPE GRID ---- */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* ---- RECIPE CARD ----
+   Each card is fully self-contained.
+   It knows nothing about the grid it sits in.
+   That's intentional — loose coupling. */
+.recipe-card {
+  background: var(--color-bg-raised);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  transition: var(--transition);
+}
+
+.recipe-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+}
+
+.recipe-card-img {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.recipe-card-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.recipe-card:hover .recipe-card-img img { transform: scale(1.06); }
+
+.recipe-badge {
+  position: absolute;
+  top: 0.75rem; left: 0.75rem;
+  background: var(--color-accent);
+  color: var(--white);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-xl);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.recipe-card-body { padding: 1.2rem; }
+
+.recipe-card-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.recipe-card h3 {
+  font-size: 1.05rem;
+  color: var(--brown-deep);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.recipe-card p {
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  /* -webkit-line-clamp: 2; */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.recipe-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.2rem;
+  border-top: 1px solid var(--color-bg-sunken);
+}
+
+.recipe-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+.tag {
+  font-size: 0.7rem;
+  background: var(--color-bg-sunken);
+  color: var(--color-text-secondary);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-xl);
+}
+
+.recipe-rating { font-size: 0.8rem; color: var(--gold); font-weight: 600; }
+
+/* ---- SURPRISE CARD ---- */
+.surprise-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  color: var(--cream);
+  backdrop-filter: blur(10px);
+  animation: fadeSlideUp 0.4s ease forwards;
+}
+
+.surprise-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+}
+
+.surprise-card h3 { font-size: 1.3rem; margin-bottom: 0.4rem; }
+.surprise-card p  { font-size: 0.85rem; color: rgba(250,247,242,0.65); }
+
+/* ---- FEATURE CARDS ---- */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin: 3rem 0;
+}
+
+.feature-card {
+  background: var(--color-bg-raised);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  border: 1px solid var(--color-border);
+  transition: var(--transition);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-accent);
+}
+
+.feature-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+.feature-card h3 { font-size: 1rem; color: var(--brown-deep); margin-bottom: 0.6rem; }
+.feature-card p  { font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.6; }
+
+/* ---- TOAST NOTIFICATION ----
+   JS creates and destroys this dynamically.
+   The styles live here so they're not buried in a JS string. */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--brown-deep);
+  color: var(--cream);
+  padding: 0.9rem 1.8rem;
+  border-radius: var(--radius-xl);
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  z-index: 999;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 1024px) {
+  .recipe-grid    { grid-template-columns: repeat(2, 1fr); }
+  .features-grid  { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .recipe-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .features-grid { grid-template-columns: 1fr; }
+}
