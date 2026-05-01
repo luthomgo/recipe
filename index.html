@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Savour — Discover, Personalize & Cook</title>
+
+  <!--
+    LOAD ORDER — CSS
+    Rule: most general → most specific.
+    base.css has variables & reset that EVERYTHING else depends on.
+    If layout.css loaded before base.css, the var(--cream) references
+    wouldn't resolve and the whole design would collapse.
+  -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/modal.css" />
+  <link rel="stylesheet" href="css/chat.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- navbar.js owns all behaviour for this block -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo"><span class="logo-icon">✦</span>Savour</a>
+      <ul class="nav-links">
+        <li><a href="#categories">Explore</a></li>
+        <li><a href="#trending">Trending</a></li>
+        <li><a href="#surprise">Surprise Me</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-ghost" id="navLoginBtn">Log In</button>
+        <button class="btn-primary" id="navSignupBtn">Get Started</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Static HTML — app.js wires the button IDs -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">✦ AI-Powered Cooking</div>
+      <h1 class="hero-title">
+        Discover, Personalize,
+        <em>and Cook with Ease.</em>
+      </h1>
+      <p class="hero-subtitle">
+        Recipes tailored to your taste, your fridge, and your lifestyle.
+        Join thousands of home cooks who've transformed mealtimes.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary btn-large" id="heroSignupBtn">Start Cooking Free</button>
+        <button class="btn-ghost btn-large" id="heroSurpriseBtn">
+          <span class="btn-icon">🎲</span> Surprise Me
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><strong>50k+</strong><span>Recipes</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><strong>200k+</strong><span>Home Cooks</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><strong>AI</strong><span>Personalized</span></div>
+      </div>
+    </div>
+    <div class="hero-image-panel">
+      <div class="floating-card card-1">
+        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=120&q=80" alt="Salad"/>
+        <div><p class="card-label">Trending Now</p><p class="card-name">Greek Buddha Bowl</p></div>
+      </div>
+      <div class="floating-card card-2">
+        <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=120&q=80" alt="Pasta"/>
+        <div><p class="card-label">⭐ Top Rated</p><p class="card-name">Truffle Pasta</p></div>
+      </div>
+      <div class="hero-main-img">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80" alt="Featured Dish"/>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    CATEGORIES
+    Pills are static HTML — recipes.js reads data-category
+    and handles the active state + filtering.
+  -->
+  <section class="categories" id="categories">
+    <div class="container">
+      <div class="section-header">
+        <h2>What are you craving?</h2>
+        <p>Browse by category and find your perfect dish</p>
+      </div>
+      <div class="category-grid">
+        <button class="category-pill active" data-category="all"><span class="cat-icon">🍽️</span> All Recipes</button>
+        <button class="category-pill" data-category="vegan"><span class="cat-icon">🥗</span> Vegan</button>
+        <button class="category-pill" data-category="high-protein"><span class="cat-icon">💪</span> High-Protein</button>
+        <button class="category-pill" data-category="quick"><span class="cat-icon">⚡</span> Quick & Easy</button>
+        <button class="category-pill" data-category="comfort"><span class="cat-icon">🍲</span> Comfort Food</button>
+        <button class="category-pill" data-category="dessert"><span class="cat-icon">🍰</span> Desserts</button>
+        <button class="category-pill" data-category="breakfast"><span class="cat-icon">🌅</span> Breakfast</button>
+        <button class="category-pill" data-category="mediterranean"><span class="cat-icon">🫒</span> Mediterranean</button>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    RECIPE GRID — empty container, recipes.js fills it.
+    HTML provides the "slot". JS provides the content.
+    This separation means you can swap the data source
+    (mock → API) without touching the HTML at all.
+  -->
+  <section class="trending" id="trending">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-label">🔥 This Week</span>
+          <h2>Trending Recipes</h2>
+        </div>
+        <button class="btn-ghost" id="viewAllBtn">View All →</button>
+      </div>
+      <div class="recipe-grid" id="recipeGrid"></div>
+    </div>
+  </section>
+
+  <!-- surprise.js owns this section -->
+  <section class="surprise-section" id="surprise">
+    <div class="surprise-inner">
+      <div class="surprise-content">
+        <h2>Not sure what to cook?</h2>
+        <p>Let our AI roll the dice for you. Tell us what's in your fridge and we'll conjure something magical.</p>
+        <button class="btn-primary btn-large" id="surpriseMeBtn">🎲 Surprise Me Tonight</button>
+      </div>
+      <div class="surprise-result" id="surpriseResult" style="display:none;">
+        <div class="surprise-card" id="surpriseCard"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Static content — no JS needed -->
+  <section class="features-teaser">
+    <div class="container">
+      <div class="section-header centered">
+        <span class="section-label">✨ After You Sign Up</span>
+        <h2>Your personal kitchen AI</h2>
+        <p>Everything tailored to you — your diet, your schedule, your fridge.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h3>Weekly Meal Plans</h3>
+          <p>Auto-generated meal schedules based on your dietary needs. Zero decision fatigue.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛒</div>
+          <h3>Smart Shopping Lists</h3>
+          <p>Ingredients auto-added to your list as you plan meals. Organised by aisle.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>AI Recommendations</h3>
+          <p>The more you cook, the smarter it gets. Personalised picks every day.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🥦</div>
+          <h3>Ingredient Filter</h3>
+          <p>Enter what's in your fridge. We'll find recipes that use exactly what you have.</p>
+        </div>
+      </div>
+      <div class="teaser-cta">
+        <button class="btn-primary btn-large" id="teaserSignupBtn">Create Free Account</button>
+        <p class="cta-subtext">No credit card. No spam. Just great food.</p>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="logo">✦ Savour</span>
+          <p>Making home cooking joyful, one meal at a time.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Explore</h4>
+          <a href="#">Trending Recipes</a>
+          <a href="#">Categories</a>
+          <a href="#">Meal Plans</a>
+        </div>
+        <div class="footer-links">
+          <h4>Account</h4>
+          <a href="#" id="footerSignupBtn">Sign Up</a>
+          <a href="#" id="footerLoginBtn">Log In</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Lutho Mgolombane. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal shells — modal.js injects content into these -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modalCloseBtn">✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="recipeModalOverlay">
+    <div class="modal modal-wide" id="recipeModal">
+      <button class="modal-close" id="recipeModalCloseBtn">✕</button>
+      <div id="recipeModalContent"></div>
+    </div>
+  </div>
+
+  <!-- =============================================
+    CHAT WIDGET
+    Sits outside all sections — it's a floating
+    overlay like the modals, not part of the page flow.
+    Shell only — chat.js controls all behaviour.
+  ============================================= -->
+  <button class="chat-trigger" id="chatTrigger" aria-label="Open cooking assistant">
+    <span class="icon-open">👨‍🍳</span>
+    <span class="icon-close">✕</span>
+    <span class="chat-dot"></span>
+  </button>
+
+  <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Cooking assistant">
+    <div class="chat-header">
+      <div class="chat-avatar">👨‍🍳</div>
+      <div class="chat-header-info">
+        <div class="chat-header-name">Savour AI</div>
+        <div class="chat-header-status">Cooking assistant</div>
+      </div>
+      <button class="chat-clear-btn" id="chatClearBtn">Clear chat</button>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-suggestions" id="chatSuggestions"></div>
+    <div class="chat-input-area">
+      <textarea
+        class="chat-input"
+        id="chatInput"
+        placeholder="Ask me anything about cooking..."
+        rows="1"
+        aria-label="Message input"
+      ></textarea>
+      <button class="chat-send-btn" id="chatSendBtn" aria-label="Send message" disabled>➤</button>
+    </div>
+  </div>
+
+  <!--
+    JS LOAD ORDER — read this carefully.
+
+    data.js    → RECIPES array. No dependencies.
+    state.js   → AppState object. No dependencies.
+    recipes.js → needs RECIPES + AppState
+    modal.js   → needs AppState
+    surprise.js → needs RECIPES
+    navbar.js  → no shared dependencies
+    app.js     → calls .init() on ALL of the above. Must be LAST.
+
+    Breaking this order = "X is not defined" errors.
+    This is what Webpack/Vite solve automatically with ES Modules.
+    We do it manually here so you understand the WHY.
+  -->
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/recipes.js"></script>
+  <script src="js/modal.js"></script>
+  <script src="js/surprise.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/chat.js"></script>
+
+</body>
+</html>
