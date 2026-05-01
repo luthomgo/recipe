@@ -1,0 +1,212 @@
+/*
+  base.css
+  --------
+  WHAT BELONGS HERE: Things with zero layout knowledge.
+  This file answers: "What does the site look like at the
+  atom level?" — colours, fonts, spacing scale, buttons.
+
+  WHAT DOES NOT BELONG HERE: Anything that knows about
+  sections, grids, or page structure. That lives in layout.css.
+
+  WHY THIS MATTERS: If a designer changes the brand colour,
+  they touch ONE file — this one. Nothing else.
+*/
+
+/* ---- DESIGN TOKENS ---- */
+:root {
+  /* Colours */
+  --cream:              #FAF7F2;
+  --cream-dark:         #F0EBE1;
+  --brown-deep:         #2C1A0E;
+  --brown-mid:          #5C3D2E;
+  --olive:              #4A5240;
+  --olive-light:        #7A8C6E;
+  --terracotta:         #C4622D;
+  --terracotta-light:   #E8845A;
+  --gold:               #D4A853;
+  --white:              #FFFFFF;
+
+  /* Semantic colour aliases — use these in components,
+     not the raw values above. This way if --cream changes,
+     all backgrounds update automatically. */
+  --color-bg:           var(--cream);
+  --color-bg-raised:    var(--white);
+  --color-bg-sunken:    var(--cream-dark);
+  --color-text:         var(--brown-deep);
+  --color-text-secondary: #6B5744;
+  --color-text-muted:   #9E8575;
+  --color-accent:       var(--terracotta);
+  --color-accent-hover: var(--terracotta-light);
+  --color-border:       rgba(44,26,14,0.08);
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  /* Spacing scale — use multiples of 4px */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Border radius */
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --radius-xl:  32px;
+
+  /* Shadows */
+  --shadow-sm:  0 2px 8px rgba(44,26,14,0.08);
+  --shadow-md:  0 8px 24px rgba(44,26,14,0.12);
+  --shadow-lg:  0 20px 60px rgba(44,26,14,0.18);
+
+  /* Transitions */
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Layout */
+  --max-width: 1200px;
+  --nav-height: 68px;
+}
+
+/* ---- RESET ----
+   Why? Browsers have different default styles.
+   A reset makes our baseline consistent everywhere.
+   We use a minimal reset — not a nuclear wipe —
+   because some defaults (like <strong> being bold) are fine. */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+ul  { list-style: none; }
+a   { text-decoration: none; color: inherit; }
+button { cursor: pointer; }
+
+/* ---- TYPOGRAPHY ----
+   We define heading sizes once here.
+   No component should hard-code font-size for headings. */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+/* ---- SHARED UTILITY CLASSES ---- */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ---- BUTTONS ----
+   Two variants: primary (dominant CTA) and ghost (secondary).
+   Never put two primary buttons side by side — one must lead.
+   btn-large is a SIZE modifier, not a variant. */
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-xl);
+  padding: 0.65rem 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: var(--transition);
+  letter-spacing: 0.02em;
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(196,98,45,0.35);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 0.65rem 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: rgba(196,98,45,0.05);
+}
+
+.btn-large {
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+}
+
+.btn-icon { margin-right: 0.4rem; }
+
+/* ---- SECTION HEADER — shared across sections ---- */
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+}
+
+.section-header.centered {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.section-header h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--brown-deep);
+}
+
+.section-header p {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.4rem;
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 0.4rem;
+}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
