@@ -3,59 +3,53 @@
   ----------
   NAMESPACE: Recipes
   DEPENDENCIES: RECIPES (data.js), AppState (state.js)
-  OWNS: Recipe grid rendering, category filtering, recipe detail modal
-
-  THE NAMESPACE PATTERN:
-  Everything in this file lives inside the Recipes object.
-  From outside this file, you call Recipes.render() or Recipes.init().
-  You cannot accidentally overwrite a function in modal.js
-  because they live in different objects (Modal.open vs Recipes.open).
-
-  This is manual encapsulation — the same thing ES Modules
-  (import/export) give you automatically. We do it by hand
-  so you understand the problem they solve.
+  OWNS: Recipe grid rendering, category filtering, search, recipe detail modal
 */
 
 const Recipes = {
-  /*
-    init()
-    Called once by app.js on DOMContentLoaded.
-    Sets up event listeners and renders the first view.
-    
-    WHY AN init() PATTERN?
-    Because init() only runs when we call it.
-    If this code ran immediately on file load, the DOM
-    might not be ready yet and querySelector would return null.
-    DOMContentLoaded in app.js guarantees the DOM exists first.
-  */
   init() {
     this.render();
     this._bindCategoryPills();
+    this._bindSearch();
   },
 
   /*
     render()
-    Builds recipe cards from filtered data and injects them
-    into #recipeGrid in one DOM write (innerHTML).
-
-    WHY ONE innerHTML ASSIGNMENT?
-    Each time you touch the DOM, the browser potentially
-    recalculates layout (a "reflow"). Building the full HTML
-    string first and writing once = one reflow.
-    Writing card by card in a loop = N reflows. Slow.
+    Handles BOTH category filter AND search filter in one pass.
+    Step 1 — filter by category
+    Step 2 — filter that result by search query
+    Both read from AppState so they always stay in sync.
   */
   render() {
     const grid = document.getElementById("recipeGrid");
-    const filtered =
+
+    // Step 1: category filter
+    let filtered =
       AppState.activeCategory === "all"
         ? RECIPES
         : RECIPES.filter((r) => r.category === AppState.activeCategory);
 
+    // Step 2: search filter on top of category result
+    const query = (AppState.searchQuery || "").trim().toLowerCase();
+    if (query) {
+      filtered = filtered.filter(
+        (r) =>
+          r.title.toLowerCase().includes(query) ||
+          r.description.toLowerCase().includes(query) ||
+          r.tags.some((tag) => tag.toLowerCase().includes(query)) ||
+          r.category.toLowerCase().includes(query),
+      );
+    }
+
+    // No results state
     if (filtered.length === 0) {
+      const msg = query
+        ? `No recipes found for "<strong>${query}</strong>". Try a different search.`
+        : "No recipes in this category yet. Check back soon!";
       grid.innerHTML = `
-        <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--color-text-muted);">
-          <p style="font-size:2rem;margin-bottom:0.5rem;">🍽️</p>
-          <p>No recipes in this category yet. Check back soon!</p>
+        <div class="search-no-results">
+          <p>🍽️</p>
+          <p>${msg}</p>
         </div>`;
       return;
     }
@@ -65,22 +59,6 @@ const Recipes = {
       .join("");
   },
 
-  /*
-    _cardTemplate(recipe)
-    Returns the HTML string for a single recipe card.
-
-    WHY A SEPARATE METHOD?
-    Because render() shouldn't know how a card looks.
-    _cardTemplate() knows the card structure.
-    render() knows how to inject cards into the grid.
-    Single responsibility again.
-
-    WHY THE UNDERSCORE PREFIX?
-    Convention: _method means "private — only used inside
-    this object, don't call it from outside."
-    JS doesn't enforce this, but the underscore is a signal
-    to your future self and teammates.
-  */
   _cardTemplate(recipe) {
     return `
       <article
@@ -113,12 +91,6 @@ const Recipes = {
     `;
   },
 
-  /*
-    openDetail(id)
-    Shows the recipe detail modal with a login prompt.
-    This is the "gate" from the PDF spec:
-    users must sign up to see full recipe details.
-  */
   openDetail(id) {
     const recipe = RECIPES.find((r) => r.id === id);
     if (!recipe) return;
@@ -145,37 +117,89 @@ const Recipes = {
         </div>
       </div>
     `;
-
     overlay.classList.add("open");
   },
 
   /*
-    _bindCategoryPills()
-    Attaches click events to all category pills.
-    Updates AppState and re-renders on click.
-
-    WHY READ data-category FROM THE ELEMENT?
-    Because we never want JS to know the list of categories
-    by heart — that's the HTML's job. The JS just reads
-    whatever the HTML says. Change the HTML, JS adapts.
-    This is called "data-driven" behaviour.
+    _bindSearch()
+    Wires up all search interactions:
+    1. Click circle  → expand widget
+    2. Type          → filter recipes in real time
+    3. Click ✕       → clear + collapse
+    4. Click outside → collapse
+    5. Escape key    → collapse
   */
+  _bindSearch() {
+    const widget = document.getElementById("searchWidget");
+    const trigger = document.getElementById("searchTrigger");
+    const input = document.getElementById("searchInput");
+    const closeBtn = document.getElementById("searchClose");
+
+    if (!widget || !trigger || !input || !closeBtn) return;
+
+    // 1. Circle → expand
+    trigger.addEventListener("click", () => {
+      widget.classList.add("is-open");
+      setTimeout(() => input.focus(), 300);
+    });
+
+    // 2. Typing → real-time filter
+    input.addEventListener("input", () => {
+      AppState.searchQuery = input.value;
+      this.render();
+      if (input.value.trim()) {
+        document
+          .getElementById("trending")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+    });
+
+    // 3. ✕ → clear and collapse
+    closeBtn.addEventListener("click", () => this._closeSearch());
+
+    // 4. Click outside → collapse
+    document.addEventListener("click", (e) => {
+      if (!widget.contains(e.target)) this._closeSearch();
+    });
+
+    // 5. Escape → collapse
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && widget.classList.contains("is-open")) {
+        this._closeSearch();
+      }
+    });
+  },
+
+  /*
+    _closeSearch()
+    Single method called from three places — DRY principle.
+    Collapses widget, clears input, resets state, re-renders.
+  */
+  _closeSearch() {
+    const widget = document.getElementById("searchWidget");
+    const input = document.getElementById("searchInput");
+    if (!widget || !input) return;
+
+    widget.classList.remove("is-open");
+    input.value = "";
+    AppState.searchQuery = "";
+    this.render();
+  },
+
   _bindCategoryPills() {
     const pills = document.querySelectorAll(".category-pill");
-
     pills.forEach((pill) => {
       pill.addEventListener("click", () => {
-        // Update visual state
         pills.forEach((p) => p.classList.remove("active"));
         pill.classList.add("active");
-
-        // Update app state
         AppState.activeCategory = pill.dataset.category;
 
-        // Re-render with new filter
-        this.render();
+        // Clear search when switching category
+        const input = document.getElementById("searchInput");
+        if (input) input.value = "";
+        AppState.searchQuery = "";
 
-        // Scroll to the grid
+        this.render();
         document
           .getElementById("trending")
           .scrollIntoView({ behavior: "smooth" });
