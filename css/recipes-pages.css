@@ -1,0 +1,600 @@
+/*
+  recipes-page.css
+  ----------------
+  OWNS: Layout and structure of recipes.html only.
+  Recipe cards, pills, search widget, modals — those
+  are shared components already in components.css.
+  This file only knows about THIS page's skeleton.
+*/
+
+/* ---- PAGE BASE ---- */
+body {
+  background: var(--cream);
+  min-height: 100vh;
+}
+
+/* ---- NAV ---- */
+.rp-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(250,247,242,0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rp-nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rp-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rp-back-btn {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition: var(--transition);
+}
+.rp-back-btn:hover { color: var(--color-accent); }
+
+/* Filter toggle — visible on mobile, hidden on desktop */
+.rp-filter-toggle {
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--white);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 0.45rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.rp-filter-toggle:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.filter-badge {
+  background: var(--color-accent);
+  color: var(--white);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- PAGE HEADER ---- */
+.rp-header {
+  /* background: var(--brown-deep); */
+  /* padding: 2.5rem 2rem 0; */
+  position: relative;
+}
+
+.rp-header-hero{
+  position: relative;
+  min-height: 420px;
+  display: flex;
+  align-items: flex-end;
+  background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&q=85');
+  background-size: cover;
+  background-position: center 40%;
+  overflow:hidden;
+}
+
+
+/* Dark gradient overlay — text readable, image still visible */
+
+.rp-header-overlay{
+  position: absolute;
+  inset: 0;
+ background: linear-gradient(
+    to bottom,
+    rgba(20, 10, 5, 0.25) 0%,
+    rgba(20, 10, 5, 0.55) 50%,
+    rgba(20, 10, 5, 0.88) 100%
+  );
+  
+}
+
+
+.rp-header-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  width:100%;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.rp-header-eyebrow{
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+
+}
+
+.rp-eyebrow-line{
+  flex: 0 0 40px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.6;
+}
+
+.rp-header-title{
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+}
+
+.rp-header-title em{
+  font-style: italic;
+  color: var(--gold)
+}
+
+.rp-header-sub{
+  font-size: 0.92rem;
+  color: rgba(250, 247, 242, 0.65);
+  line-height: 1.6;
+  max-width: 520px;
+}
+
+
+/* Search widget on dark background */
+.rp-header-search{
+  display: flex;
+  align-items: center;
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 0 1.25rem;
+  height: 52px;
+  max-width: 580px;
+  gap: 0.75rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 0.2s ease;
+}
+
+.rp-header-search:focus-within{
+   box-shadow: 0 4px 24px rgba(0,0,0,0.25), 0 0 0 3px rgba(196,98,45,0.3);
+}
+
+.rp-search-icon{
+  font-size: 1rem;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.rp-search-input{
+  flex:1;
+  border: none;
+  outline: none;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background: transparent;
+  min-width: 0;
+}
+
+.rp-search-input::placeholder{
+  color: var(--color-text-muted)
+}
+
+.rp-search-clear{
+  background: var(--cream-dark);
+  border:none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.rp-search-clear:hover{
+  background: var(--color-accent);
+  color: var(--white);
+}
+
+/* ---- ACTIVE FILTER TAGS BAR ---- */
+.rp-active-filters {
+  background: var(--brown-deep);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+
+}
+
+.rp-active-filters-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.active-filters-label {
+  font-size: 0.78rem;
+  color: rgba(250,247,242,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.active-filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+/*
+  Active filter tag — each one is a pill with an ✕.
+  Clicking ✕ removes only that filter.
+  This pattern is called "faceted search" and it's
+  the standard UX for filtering large datasets.
+*/
+.active-filter-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--cream);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-xl);
+  font-size: 0.78rem;
+  font-family: var(--font-body);
+}
+
+.active-filter-tag button {
+  background: none;
+  border: none;
+  color: rgba(250,247,242,0.6);
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.active-filter-tag button:hover { color: var(--cream); }
+
+.clear-all-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(250,247,242,0.6);
+  border-radius: var(--radius-xl);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.78rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.clear-all-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* ---- MAIN LAYOUT — sidebar left, grid right ---- */
+.rp-layout {
+  display: grid;
+  /*
+    260px sidebar + flexible main content.
+    On tablet (1024px) sidebar collapses to a drawer.
+  */
+  grid-template-columns: 260px 1fr;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: calc(100vh - 64px);
+  align-items: start;
+}
+
+/* ---- SIDEBAR ---- */
+.rp-sidebar {
+  position: sticky;
+  top: 64px; /* sticks below nav */
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  border-right: 1px solid var(--color-border);
+  background: var(--white);
+
+  /* Thin custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--cream-dark) transparent;
+}
+.rp-sidebar::-webkit-scrollbar { width: 4px; }
+.rp-sidebar::-webkit-scrollbar-thumb { background: var(--cream-dark); }
+
+.rp-sidebar-inner {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ---- SURPRISE ME — sidebar version ---- */
+.sidebar-surprise {
+  text-align: center;
+  padding: 1rem 0;
+}
+.sidebar-surprise p {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+}
+.sidebar-surprise-btn {
+  width: 100%;
+  padding: 0.7rem 1rem;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 1rem 0;
+}
+
+/* ---- FILTER GROUPS ---- */
+.filter-group { padding: 0.25rem 0; }
+
+.filter-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.filter-group-header h3 {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+.filter-reset-btn {
+  background: none;
+  border: none;
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: color 0.2s;
+  padding: 0;
+}
+.filter-reset-btn:hover { color: var(--color-accent); }
+
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/*
+  Filter option — checkbox/radio + label.
+  We style the whole <label> as a clickable row,
+  not just the checkbox. Bigger click target = better UX.
+*/
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+  color: var(--color-text);
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+}
+.filter-option:hover { background: var(--cream-dark); }
+
+.filter-option input[type="checkbox"],
+.filter-option input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Sort dropdown */
+.rp-sort {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--color-text);
+  background: var(--cream);
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+}
+.rp-sort:hover,
+.rp-sort:focus { border-color: var(--color-accent); }
+
+/* Sidebar clear all button */
+.sidebar-clear {
+  border-color: var(--color-border);
+  color: var(--color-text-secondary);
+  width: 100%;
+  padding: 0.5rem;
+  text-align: center;
+}
+.sidebar-clear:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* ---- MAIN CONTENT ---- */
+.rp-main {
+  padding: 1.5rem 2rem 4rem;
+  min-width: 0; /* prevents grid blowout */
+}
+
+/* Category pills row */
+.rp-category-row {
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  /* Hide scrollbar but keep scroll functionality */
+  scrollbar-width: none;
+}
+.rp-category-row::-webkit-scrollbar { display: none; }
+
+.rp-category-row .category-grid {
+  flex-wrap: nowrap; /* horizontal scroll on mobile */
+}
+
+/* ---- NO RESULTS ---- */
+.rp-no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-text-muted);
+}
+.rp-no-results .no-results-emoji { font-size: 3rem; margin-bottom: 1rem; }
+.rp-no-results h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--brown-deep);
+  margin-bottom: 0.5rem;
+}
+.rp-no-results p { font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+/* ---- MOBILE SIDEBAR OVERLAY ----
+   Darkens the page behind the open sidebar drawer on mobile.
+*/
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(44,26,14,0.5);
+  z-index: 89;
+}
+.sidebar-overlay.active { display: block; }
+
+/* ---- RECIPE DETAIL MODAL (full on this page) ---- */
+.recipe-detail-full { padding: 0.5rem 0; }
+
+.recipe-detail-full img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.25rem;
+}
+
+.recipe-detail-full h2 {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  color: var(--brown-deep);
+  margin-bottom: 0.75rem;
+}
+
+.recipe-detail-full .recipe-detail-meta {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.recipe-detail-full .recipe-detail-meta span {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.recipe-detail-full .recipe-detail-desc {
+  font-size: 0.92rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+
+.recipe-detail-full .recipe-detail-tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+/* difficulty badge colours */
+.badge-easy   { background: #e8f5e9; color: #2e7d32; }
+.badge-medium { background: #fff8e1; color: #f57f17; }
+.badge-hard   { background: #fce4ec; color: #c62828; }
+
+.difficulty-badge {
+  padding: 0.2rem 0.7rem;
+  border-radius: var(--radius-xl);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 1024px) {
+  .rp-layout { grid-template-columns: 1fr; }
+
+  /* Sidebar becomes a fixed drawer on mobile */
+  .rp-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 90;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .rp-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .rp-filter-toggle { display: flex; }
+}
+
+@media (max-width: 768px) {
+  .rp-header { padding: 1.5rem 1rem 0; }
+  .rp-header-inner { flex-direction: column; align-items: flex-start; gap: 1rem; padding-bottom: 1.5rem; }
+  .rp-main { padding: 1.25rem 1rem 3rem; }
+  .rp-category-row .category-grid { gap: 0.5rem; }
+  .category-pill { padding: 0.5rem 0.9rem; font-size: 0.82rem; }
+}
