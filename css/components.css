@@ -48,6 +48,7 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  margin: 2px;
 }
 
 .category-pill:hover,
@@ -396,3 +397,21 @@
 @media (max-width: 480px) {
   .features-grid { grid-template-columns: 1fr; }
 }
+
+/* ---- DIFFICULTY BADGE ON CARD IMAGE ---- */
+.recipe-card-img .difficulty-badge {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-xl);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+ 
+.badge-easy   { background: #e8f5e9; color: #2e7d32; }
+.badge-medium { background: #fff8e1; color: #f57f17; }
+.badge-hard   { background: #fce4ec; color: #c62828; }
+ 
