@@ -55,6 +55,7 @@ const Recipes = {
     }
 
     grid.innerHTML = filtered
+      .slice(0,6)
       .map((recipe) => this._cardTemplate(recipe))
       .join("");
   },
