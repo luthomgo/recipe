@@ -38,12 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
   Surprise.init();
   Chat.init();
 
-  // ---- WIRE UP BUTTONS ----
-  // Why here and not inside each namespace?
-  // Because these buttons trigger cross-feature behaviour.
-  // "Sign up" opens Modal — that's Modal's job, but the
-  // button lives near the Recipe grid. app.js is the right
-  // place to bridge them.
 
   // Navbar
   document
@@ -93,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // "View All" — requires login
   document
     .getElementById("viewAllBtn")
-    .addEventListener("click", () => Modal.open("signup"));
+    .addEventListener("click", () => (window.location.href = "recipes.html"));
 
   // Features teaser CTA
   document
