@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Recipes - Savour</title>
+
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css"/>
+    <link rel="stylesheet" href="css/modal.css"/>
+    <link rel="stylesheet" href="css/recipes-pages.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>  
+    
+    <nav class="rp-nav" id="rpNav">
+        <div class="rp-nav-inner">
+            <a href=index.html class="logo">
+                <span class="logo-icon">✦</span>Savour
+            </a>
+            <div class="rp-nav-right">
+                <button class="rp-filter-toggle" id="filterToggle" aria-label="Toggle filters">
+                    <span class="filter-toggle-icon">⚙</span>
+                    <span>Filters</span>
+                    <span class="filter-badge" id="filterBadge" style="display:none;">0</span>
+                </button>
+                <a href="index.html" class="rp-back-btn">← Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="rp-header">
+
+      <div class="rp-header-hero">
+      <div class="rp-header-overlay"></div>
+      <div class="rp-header-inner">
+
+        <!--Issue label- like a section tag -->
+        <div class="rp-header-eyebrow">
+          <span class="rp-eyebrow-line"></span>
+          <span>Savour Collection</span>
+          <span class="rp-eyebrow-line"></span>
+        </div>
+
+        <h1 class="rp-header-title">
+          Every Recipes, <br>
+          <em>Your Way.</em>
+        </h1>
+
+        <p class="rp-header-sub">
+          Filter by cuisine, difficulty and time -
+          <span id="resultCount">loading recipes...</span>
+        </p>
+
+
+        <div class="rp-header-search">
+          <span class="rp-search-icon">🔍</span>
+            <input 
+            type="text"
+            class="rp-search-input"
+            id="searchInput"
+            placeholder="Search any recipe, ingredient, or cuisine..."
+            aria-label="Search recipes"
+            autocomplete="off"
+            />
+          <button class="rp-search-clear" id="searchClose" aria-label="Clear search" style="display: none;">✕</button>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="rp-active-filters" id="activeFilters" style="display: none;">
+        <div class="rp-active-filters-inner">
+          <span class="active-filters-label">Filtering by:</span>
+          <div class="active-filter-tags"id="activeFilterTags"></div>
+          <button class="clear-all-btn"id="clearAllBtn">Clear All</button>
+        </div>
+      </div>
+    </header>
+
+  <!-- =============================================
+    MAIN LAYOUT — sidebar + grid
+  ============================================= -->
+  <div class="rp-layout">
+
+    <aside class="rp-sidebar" id="idSidebar">
+      <div class="rp-sidebar-inner">
+
+        <div class="sidebar-surprise">
+          <p>Can't decide?</p>
+          <button class="btn-primary sidebar-surprise-btn" id="rpSurpriseBtn">
+            🎲 Surprise Me
+          </button>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- Cuisine Filter -->
+        <div class="filter-group" id="filterCuisine">
+          <div class="filter-group-header">
+            <h3>Cuisine</h3>
+            <button class="filter-reset-btn" data-filter="cuisine">Reset</button>
+          </div>
+
+          <div class="filter-options">
+            <label class="filter-option">
+              <input type="checkbox" value="asian" data-filter="cuisine" /> Asian
+            </label>
+
+            <label class="filter-option">
+              <input type="checkbox" value="italian" data-filter="cuisine" /> Italian
+            </label>
+
+            <label class="filter-option">
+              <input type="checkbox" value="mediterranean" data-filter="cuisine" /> Mediterranean
+            </label>
+
+            <label class="filter-option">
+              <input type="checkbox" value="middle-eastern" data-filter="cuisine" /> Middle Eastern
+            </label>
+
+            <label class="filter-option">
+              <input type="checkbox" value="indian" data-filter="cuisine" /> Indian
+            </label>
+
+            <label class="filter-option">
+              <input type="checkbox" value="american" data-filter="cuisine" /> American
+            </label>
+
+            <label class="filter-option">
+              <input type="checkbox" value="french" data-filter="cuisine" /> French
+            </label>
+          </div>
+        </div>
+
+        <div class="sidebar-divider"></div>
+                <!-- DIET -->
+        <div class="filter-group" id="filterDiet">
+          <div class="filter-group-header">
+            <h3>Diet</h3>
+            <button class="filter-reset-btn" data-filter="diet">Reset</button>
+          </div>
+
+          <div class="filter-options">
+            <label class="filter-option">
+              <input type="checkbox" value="vegan" data-filter="diet" /> Vegan
+            </label>
+
+            <label class="filter-option">
+              <input type="checkbox" value="vegetarian" data-filter="diet" /> Vegetarian
+            </label>
+
+            <label class="filter-option">
+              <input type="checkbox" value="gluten-free" data-filter="diet" /> Gluten-Free
+            </label>
+
+            <label class="filter-option">
+              <input type="checkbox" value="dairy-free" data-filter="diet" /> Dairy-Free
+            </label>
+          </div>
+        </div>
+ 
+        <div class="sidebar-divider"></div>
+ 
+        <!-- DIFFICULTY -->
+        <div class="filter-group" id="filterDifficulty">
+          <div class="filter-group-header">
+            <h3>Difficulty</h3>
+            <button class="filter-reset-btn" data-filter="difficulty">Reset</button>
+          </div>
+
+          <div class="filter-options">
+            <label class="filter-option">
+              <input type="checkbox" value="easy" data-filter="difficulty" /> 🟢 Easy
+            </label>
+
+            <label class="filter-option">
+              <input type="checkbox" value="medium" data-filter="difficulty" /> 🟡 Medium
+            </label>
+
+            <label class="filter-option">
+              <input type="checkbox" value="hard" data-filter="difficulty" /> 🔴 Hard
+            </label>
+          </div>
+        </div>
+ 
+        <div class="sidebar-divider"></div>
+ 
+        <!-- PREP TIME -->
+        <div class="filter-group">
+          <div class="filter-group-header">
+            <h3>Prep Time</h3>
+            <button class="filter-reset-btn" data-filter="prepTime">Reset</button>
+          </div>
+          <div class="filter-options">
+            <label class="filter-option">
+              <input type="radio" name="prepTime" value="15" data-filter="prepTime" /> Under 15 min
+            </label>
+
+            <label class="filter-option">
+              <input type="radio" name="prepTime" value="30" data-filter="prepTime" /> Under 30 min
+            </label>
+
+            <label class="filter-option">
+              <input type="radio" name="prepTime" value="60" data-filter="prepTime" /> Under 60 min
+            </label>
+
+            <label class="filter-option">
+              <input type="radio" name="prepTime" value="999" data-filter="prepTime" /> Any time
+            </label>
+          </div>
+        </div>
+ 
+        <div class="sidebar-divider"></div>
+ 
+        <!-- SORT -->
+        <div class="filter-group">
+          <div class="filter-group-header">
+            <h3>Sort By</h3>
+          </div>
+          <select class="rp-sort" id="sortSelect">
+            <option value="default">Default</option>
+            <option value="rating">Highest Rated</option>
+            <option value="time-asc">Quickest First</option>
+            <option value="calories-asc">Lowest Calories</option>
+            <option value="difficulty-asc">Easiest First</option>
+            <option value="difficulty-desc">Hardest First</option>
+          </select>
+        </div>
+ 
+        <div class="sidebar-divider"></div>
+ 
+        <button class="clear-all-btn sidebar-clear" id="sidebarClearBtn">
+          ✕ Clear All Filters
+        </button>
+
+      </div>
+    </aside>
+
+    <main class="rp-main">
+
+      <!--horizontal scroll on mobile -->
+      <div class="rp-category-row">
+        <div class="category-grid" id="categoryGrid">
+          <button class="category-pill active" data-category="all">🍽️ All</button></button>
+          <button class="category-pill"data-category="vegan">🥗 Vegan</button>
+          <button class="category-pill" data-category="high-protein">💪 High-Protein</button>
+          <button class="category-pill" data-category="quick">⚡ Quick</button>
+          <button class="category-pill" data-category="comfort">🍲 Comfort</button>
+          <button class="category-pill" data-category="dessert">🍰 Desserts</button>
+          <button class="category-pill" data-category="breakfast">🌅 Breakfast</button>
+          <button class="category-pill" data-category="mediterranean">🫒 Mediterranean</button>
+
+        </div>
+      </div>
+
+      <div class="recipe-grid" id="recipeGrid"></div>
+
+    </main>
+  </div>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="modal-overlay" id="recipeModalOverlay">
+  <div class="modal modal-wide" id="recipeModal">
+    <button class="modal-close" id="recipeModalCloseBtn">✕</button>
+    <div id="recipeModalContent"></div>
+  </div>
+</div>
+
+
+<script src="js/data.js"></script>
+<script src="js/state.js"></script>
+<script src="js/recipes-pages.js"></script>
+
+    
+</body>
+</html>
