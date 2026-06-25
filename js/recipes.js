@@ -93,34 +93,12 @@ const Recipes = {
   },
 
   openDetail(id) {
-    const recipe = RECIPES.find((r) => r.id === id);
-    if (!recipe) return;
-
-    const overlay = document.getElementById("recipeModalOverlay");
-    const content = document.getElementById("recipeModalContent");
-
-    content.innerHTML = `
-      <div class="recipe-detail">
-        <img class="recipe-detail-img" src="${recipe.image}" alt="${recipe.title}" />
-        <h2>${recipe.title}</h2>
-        <div class="recipe-detail-meta">
-          <span>⏱ ${recipe.time}</span>
-          <span>🔥 ${recipe.calories}</span>
-          <span>📊 ${recipe.difficulty}</span>
-          <span>★ ${recipe.rating}</span>
-        </div>
-        <p class="recipe-detail-desc">${recipe.description}</p>
-        <div class="login-prompt">
-          <p>🔒 <strong>Sign up free</strong> to unlock full ingredients, step-by-step instructions, and save this recipe.</p>
-          <button class="btn-primary" onclick="Modal.closeRecipe(); Modal.open('signup');">
-            Unlock Full Recipe
-          </button>
-        </div>
-      </div>
-    `;
-    overlay.classList.add("open");
+    //Navigate to the full recipe page
+    //URL parameter pattern: dish.html?id=4
+    //recipes.js reads this and builds the page from RECIPES data
+    window.location.href = `dish.html?id=${id}`;
   },
-
+  
   /*
     _bindSearch()
     Wires up all search interactions:
