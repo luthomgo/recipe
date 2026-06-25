@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Recipe - Savour</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/modal.css" />
+  <link rel="stylesheet" href="css/dish.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <!--
+    NAV
+  -->
+  <nav class="rc-nav" id="rcNav">
+    <div class="rc-nav-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">✦</span>Savour
+      </a>
+      <div class="rc-breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="rc-crumb-sep">›</span>
+        <a href="recipes.html">Recipes</a>
+        <span class="rc-crumb-sep">›</span>
+        <span id="breadcrumbTitle">Loading...</span>
+      </div>
+
+      <div class="rc-nav-actions">
+        <button class="rc-save-btn" id="saveRecipeBtn" aria-label="Save recipe">
+          <span class="save-icon">♡</span>
+          <span class="save-label">Save</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!--
+  Hero
+  -->
+  <div class="rc-hero" id="rcHero">
+    <div class="rc-hero-overlay"></div>
+    <div class="rc-hero-content">
+      <div class="rc-hero-meta" id="rcHeroMeta"></div>
+      <h1 class="rc-hero-title" id="rcHeroTitle">Loading...</h1>
+      <div class="rc-hero-author" id="rcHeroAuthor"></div>
+    </div>
+  </div>
+
+  <!--
+    BODY — two column layout
+    Left: summary, ingredients, steps, video
+    Right: sticky sidebar with stats and actions
+  -->
+    
+  <div class="rc-body">
+
+    <!--LEFT COLUMN-->
+    <div class="rc-left">
+
+    <!--Summary-->
+    <section class="rc-section">
+      <p class="rc-summary" id="rcSummary"></p>
+    </section>
+
+    <!--Ingredients-->
+    <section class="rc-section" id="ingredientsSection">
+      <div class="rc-section-header">
+        <h2>Ingredients</h2>
+
+        <!---
+        SERVINGS ADJUSTER
+        clicking - or + changes PagesState.servings.
+        render() recalculates evert ingredient amount
+        proportionally (amount / baseServings) * newServings
+        -->
+        <div class="rc-servings-control">
+          <span class="rc-servings-label">Servings</span>
+          <button class="rc-servings-btn" id="servingsDown" aria-label="Decrease servings">-</button>
+          <span class="rc-servings-count" id="servingsCount">2</span>
+          <button class="rc-servings-btn" id="servingsUp" aria-label="Increase servings">+</button>
+        </div>
+
+        <!--
+            UNIT TOGGLE
+            Metric (g, ml) ↔ Imperial (cups, oz, fl oz)
+            All amounts stored in metric in data.js.
+            Conversion happens in recipe.js at render time.
+            We never modify the source data — only the display.
+          -->
+            <div class="rc-unit-toggle">
+              <button class="rc-unit-btn active" id="unitMetric" data-unit="metric">Metric</button>
+              <button class="rc-unit-btn" id="unitImperial" data-init="imperial">Imperial</button>
+            </div>
+          </div>
+
+          <!--
+          INGREDIENTS LISTS
+          Each ingredient is a <li> with a checkbox.
+          Clicking ticks it off as you cook.
+          The substitute tooltip appears on hover via CSS :hover
+          -->
+          <ul class="rc-ingredients-list" id="ingredientsList"></ul>
+          </section>
+
+      <!--Instructions-->
+      <section class="rc-section" id="stepsSection">
+        <div class="rc-section-header">
+          <h2>Instructions</h2>
+          <button class="rc-reset-steps" id="resetSteps">Reset progress</button>
+        </div>
+        <ol class="rc-steps-list" id="stepsList"></ol>
+      </section>
+
+      <!-- Video -->
+       <section class="rc-section" id="videoSection">
+        <div class="rc-section-header">
+          <h2>Watch & Cook</h2>
+        </div>
+
+        <div class="rc-video-wrapper">
+          <iframe 
+          id="recipeVideo"
+          src=""
+          title="Recipe Video"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+          </iframe> 
+        </div>
+       </section>
+      </div>
+
+      <!-- RIGHT SIDEBAR -->
+       <aside class="rc-sidebar" id="rcSidebar">
+
+      <!--Quick stats-->
+      <div class="rc-stats-card">
+        <div class="rc-stat-row" id="rcStatRows"></div>
+      </div>
+
+    <!-- 
+    NUTRITION BAR
+    Visual breakdown of protein, carbs, fat.
+    -->
+
+    <div class="rc-nutrition-card">
+      <h3>Nutrition <span class="rc-nutrition-per">(per serving)</span></h3>
+      <div class="rc-nutrition-bar" id="nutritionBar"></div>
+      <div class="rc-nutrition-legend" id="nutritionLegend"></div>
+      <div class="rc-nutrition-note">Values are estimate. Adjust for actual ingredients used.</div>
+    </div>
+
+    <!--Actions-->
+    <div class="rc-actions-card">
+
+      <button class="rc-action-btn rc-action-save" id="sidebarSaveBtn">
+        <span>♡</span> Save Recipe
+      </button>
+
+      <button class="rc-action-btn rc-action-mealplan" id="mealPlanBtn">
+      <span>📅</span> Save to Meal Plan
+      </button>
+
+      <button class="rc-action-btn rc-action-print" id="printBtn">
+        <span>🖨</span> Print Recipe
+      </button>
+    </div>
+
+  </aside>
+</div>
+
+<!--
+RELATED RECIPES
+3 card from same cuisine or category.
+Keeps users browsing - the "watch next" principle.
+-->
+<section class="rc-related">
+  <div class="rc-related-inner">
+    <div class="rc-section-header">
+      <h2>You Might Also Like</h2>
+      <a href="recipes.html" class="rc-view-all"> View all recipes →</a>
+    </div>
+    <div class="recipe-grid" id="relatedGrid"></div>
+  </div>
+</section>
+
+<!--REVIEWS-->
+<section class="rc-reviews">
+  <div class="rc-reviews-inner">
+    <div class="rc-section-header">
+      <h2>Reviews</h2>
+    </div>
+    <div class="rc-reviews-display" id="reviewsDisplay"></div>
+    <div class="rc-review-cta">
+      <p>Have yoy made this recipe?</p>
+      <button class="btn-primary" onclick="alert('Sign up to leave a review - coming soon!')">
+        Leave a review
+      </button>
+    </div>
+  </div>
+</section>
+
+<!--Toast for save confirmations -->
+<div class="toast" id="toast"></div> 
+
+
+<script src="js/data.js"></script>
+<script src="js/state.js"></script>
+<script src="js/dish.js"></script>
+
+
+</body>
+</html>
