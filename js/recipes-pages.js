@@ -172,44 +172,12 @@ function cardTemplate(recipe) {
   `;
 }
 
-/* 
-  RECIPE DETAIL MODAL — full detail, no login gate
- */
+
 function openDetail(id) {
-  const recipe  = RECIPES.find(r => r.id === id);
-  if (!recipe) return;
-
-  const overlay = document.getElementById('recipeModalOverlay');
-  const content = document.getElementById('recipeModalContent');
-  const difficultyLabel = { easy: '🟢 Easy', medium: '🟡 Medium', hard: '🔴 Hard' };
-  const difficultyClass = { easy: 'badge-easy', medium: 'badge-medium', hard: 'badge-hard' };
-
-  content.innerHTML = `
-    <div class="recipe-detail-full">
-      <img src="${recipe.image}" alt="${recipe.title}" />
-      <h2>${recipe.title}</h2>
-      <div class="recipe-detail-meta">
-        <span>⏱ ${recipe.time}</span>
-        <span>🔥 ${recipe.calories}</span>
-        <span>👤 Serves ${recipe.servings}</span>
-        <span>★ ${recipe.rating}</span>
-        <span class="difficulty-badge ${difficultyClass[recipe.difficulty]}">
-          ${difficultyLabel[recipe.difficulty]}
-        </span>
-      </div>
-      <p class="recipe-detail-desc">${recipe.description}</p>
-      <div class="recipe-detail-tags">
-        ${recipe.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-        <span class="tag">${recipe.cuisine.charAt(0).toUpperCase() + recipe.cuisine.slice(1)}</span>
-      </div>
-    </div>
-  `;
-
-  overlay.classList.add('open');
+ window.location.href = `dish.html?id=${id}`;
 }
 
 function closeDetail() {
-  document.getElementById('recipeModalOverlay').classList.remove('open');
 }
 
 /* 
